@@ -15,7 +15,7 @@
 	    {% csrf_token %}
         {% for category in categories %}
             <h3> {{category}} </h3>
-            <p> {{category.description}} </p>
+            <p> {{category.description|default_if_none:''}} </p>
 			<div class="panel-group" id="accordion">
 				<div class="panel panel-default">
 				    <div class="panel-heading">
