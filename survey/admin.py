@@ -13,8 +13,6 @@ from .actions import make_published
 standard_library.install_aliases()
 
 
-
-
 class QuestionInline(admin.TabularInline):
     model = Question
     ordering = ('order', 'category', )
@@ -64,8 +62,7 @@ class ResponseAdmin(admin.ModelAdmin):
     list_filter = ('survey', 'created')
     date_hierarchy = 'created'
     inlines = [
-        AnswerTextInline, AnswerRadioInline, AnswerSelectInline,
-        AnswerSelectMultipleInline, AnswerIntegerInline
+        AnswerTextInline
     ]
     # specifies the order as well as which fields to act on
     readonly_fields = (
