@@ -13,7 +13,6 @@ from survey.models import Survey
 standard_library.install_aliases()
 
 
-
 class IndexView(TemplateView):
     template_name = "survey/list.html"
 

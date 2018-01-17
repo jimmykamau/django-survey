@@ -12,7 +12,6 @@ from survey.models import Survey
 standard_library.install_aliases()
 
 
-
 class SurveyCompleted(TemplateView):
 
     template_name = 'survey/completed.html'

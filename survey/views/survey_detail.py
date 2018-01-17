@@ -14,7 +14,6 @@ from survey.models import Category, Survey
 standard_library.install_aliases()
 
 
-
 class SurveyDetail(View):
 
     def get(self, request, *args, **kwargs):

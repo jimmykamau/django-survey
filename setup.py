@@ -13,6 +13,7 @@ def add_package(package_list, package):
     if package:
         package_list.append(package)
 
+
 setup(
     name="django-survey-and-report",
     version="1.0.5",
