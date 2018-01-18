@@ -15,7 +15,8 @@ def home(request):
 
 urlpatterns = [
     url(r"^$", home, name="home"),
+    url(r'^admin/', include('survey_admin.urls')),
     url(r'^rosetta/', include('rosetta.urls')),
     url(r'^survey/', include('survey.urls')),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^django-admin/', include(admin.site.urls)),
 ]

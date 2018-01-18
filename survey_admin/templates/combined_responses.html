@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load survey_extras %}
+
+{% block body %}
+<div class="uk-offcanvas-content">
+    {% include 'navigation.html' %}
+
+    <div class="uk-container uk-container-center">
+        <div class="uk-width-1-1 uk-margin-top">
+            <div class="uk-width-1-1 uk-margin-large-bottom">
+                <h3 class="uk-text-muted"><span uk-icon="icon: comments; ratio: 1.5"></span> Combined responses</h3>
+                <ul class="uk-breadcrumb">
+                    <li><a href="/admin/dashboard">Surveys</a></li>
+                    <li><a href="#">{{survey.name}}</a></li>
+                    <li><span href="#">Combined responses</span></li>
+                </ul>
+            </div>
+            <div class="uk-card uk-card-default uk-card-body">
+                <div class="uk-card-header">
+                    <h1 class="uk-card-title uk-margin-remove-bottom"> {{survey.name}} </h1>
+                    <p class="uk-text-meta uk-margin-remove-top"> {{survey.description|safe}} </p>
+                </div>
+                {% for category in categories %}
+                    <div class="uk-margin-medium-top">
+                        <h4> {{category}} </h4>
+                        <div class="uk-overflow-auto">
+                            <table class="uk-table uk-table-divider">
+                                {% if category.description %}
+                                    <caption>{{category.description}}</caption>
+                                {% endif %}
+                                <thead>
+                                    <tr>
+                                        <th>Question</th>
+                                        {% expr questions.filter(category=category).first().get_clean_choices() as choices %}
+                                        {% if choices %}
+                                            {% for choice in choices %}
+                                                <th>{{choice}}</th>
+                                            {% endfor %}
+                                            <th>Total</th>
+                                        {% else %}
+                                            <th>Responses</th>
+                                        {% endif %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for question in questions %}
+                                        {% if question.category == category %}
+                                            <tr>
+                                                <td>{{question.text}}</td>
+                                                {% expr questions.filter(category=category).first().get_choices() as choices %}
+                                                {% if choices %}
+                                                    {% for choice in choices %}
+                                                        {% expr answers.filter(question=question, body=choice[0]).count as resp %}
+                                                        <td>{{resp}}</td>
+                                                    {% endfor %}
+                                                    {% expr answers.filter(question=question).count as resp %}
+                                                    <td>{{resp}}</td>
+                                                {% else %}
+                                                    <td>
+                                                        {% for answer in answers %}
+                                                            {% if answer.question == question %}
+                                                                {{answer.body}}<br>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </td>
+                                                {% endif %}
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

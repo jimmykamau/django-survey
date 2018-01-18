@@ -110,6 +110,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'survey',
+    'survey_admin',
     'bootstrapform',
     'rosetta',
 )

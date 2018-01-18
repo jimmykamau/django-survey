@@ -1,0 +1,39 @@
+{% load static %}
+<div uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky">
+    <nav class="uk-navbar-container" uk-navbar>
+        <div class="uk-navbar-left uk-margin-large-left">
+            <a href="#offcanvas-nav" class="uk-navbar-toggle" uk-navbar-toggle-icon uk-toggle="target: #offcanvas-nav"></a>
+            <a href="#" class="uk-navbar-item uk-logo"> Dashboard </a>
+        </div>
+        <div class="uk-navbar-right uk-margin-large-right">
+            <ul class="uk-navbar-nav">
+                <li class="uk-active">
+                    <a href="#" uk-icon="icon: user"></a>
+                    <div class="uk-navbar-dropdown">
+                        <ul class="uk-nav uk-navbar-dropdown-nav">
+                            <li class="uk-nav-header">Options</li>
+                            <li><a href="#">Edit Profile</a></li>
+                            <li class="uk-nav-header">Actions</li>
+                            <li><a href="#">Lock</a></li>
+                            <li><a href="#">Logout</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+
+<div id="offcanvas-nav" uk-offcanvas="overlay: true" class="uk-offcanvas">
+    <div class="uk-offcanvas-bar uk-flex uk-flex-column">
+
+            <ul class="uk-nav uk-nav-primary uk-nav-center uk-margin-auto-vertical">
+                <li><a href="/admin/dashboard"><span class="uk-margin-small-right" uk-icon="icon: file-edit"></span> Surveys</a></li>
+                <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: thumbnails"></span> Item</a></li>
+                <li class="uk-nav-divider"></li>
+                <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: trash"></span> Item</a></li>
+            </ul>
+
+        </div>
+</div>

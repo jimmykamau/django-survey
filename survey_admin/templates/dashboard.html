@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="uk-offcanvas-content">
+    {% include 'navigation.html' %}
+
+    <div class="uk-container uk-container-center">
+        <div class="uk-width-1-1 uk-margin-top">
+            <div class="uk-width-1-1 uk-margin-large-bottom">
+                <h3 class="uk-text-muted"><span uk-icon="icon: file-edit; ratio: 1.5"></span> Surveys</h3>
+                <ul class="uk-breadcrumb">
+                    <li><span href="#">Surveys</span></li>
+                </ul>
+            </div>
+            <div class="uk-card uk-card-default uk-card-body">
+                {% if surveys %}
+                    <table class="uk-table uk-table-responsive uk-table-divider">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Published</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for survey in surveys %}
+                                <tr>
+                                    <td class="uk-table-link">
+                                        <a href="/admin/combined-responses/{{survey.id}}/" class="uk-link-muted">{{survey.name}}</a>
+                                    </td>
+                                    <td class="uk-text-truncate">{{survey.description}}</td>
+                                    <td class="uk-table-middle">
+                                        {% if survey.is_published %}
+                                            <svg height="14" width="14">
+                                              <circle cx="7" cy="7" r="6" fill="green" />
+                                            </svg>
+                                        {% else %}
+                                            <svg height="14" width="14">
+                                              <circle cx="7" cy="7" r="6" fill="red" />
+                                            </svg>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}
