@@ -7,7 +7,8 @@ from __future__ import (
 from django.conf.urls import url
 from future import standard_library
 from survey.views import ConfirmView, IndexView, SurveyCompleted, SurveyDetail
-from survey.views.survey_result import serve_result_csv
+from survey.views.survey_result import (
+    serve_result_csv, serve_result_single_page)
 
 standard_library.install_aliases()
 
@@ -22,4 +23,6 @@ urlpatterns = [
         name='survey-detail-step'),
     url(r'^confirm/(?P<uuid>\w+)/', ConfirmView.as_view(),
         name='survey-confirmation'),
+    url(r'^view-responses/(?P<pk>\d+)/',
+        serve_result_single_page, name='view-responses')
 ]

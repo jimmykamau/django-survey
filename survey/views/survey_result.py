@@ -7,11 +7,12 @@ from __future__ import (
 from builtins import open
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.http.response import HttpResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from future import standard_library
 from survey.exporter.csv.survey2csv import Survey2Csv
-from survey.models import Survey
+from survey.models import Category, Survey, Question, Answer
 
 standard_library.install_aliases()
 
@@ -43,3 +44,19 @@ def serve_result_csv(request, pk):
         return serve_protected_result(request, survey)
     else:
         return serve_unprotected_result_csv(survey)
+
+
+@staff_member_required
+def serve_result_single_page(request, pk):
+    template_name = 'survey/combined_results.html'
+    survey = get_object_or_404(Survey, pk=pk)
+    categories = Category.objects.filter(survey=survey).order_by('order')
+    questions = Question.objects.filter(survey=survey).order_by('order')
+    answers = Answer.objects.all()
+    context = {
+        'survey': survey,
+        'categories': categories,
+        'questions': questions,
+        'answers': answers
+    }
+    return render(request, template_name, context)
