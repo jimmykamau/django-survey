@@ -113,6 +113,7 @@ INSTALLED_APPS = (
     'survey_admin',
     'bootstrapform',
     'rosetta',
+    'widget_tweaks',
 )
 
 LOCALE_PATHS = (
@@ -147,3 +148,5 @@ LOGGING = {
         },
     }
 }
+
+ALLOWED_HOSTS = ["localhost"]

@@ -31,41 +31,35 @@
                                 <thead>
                                     <tr>
                                         <th>Question</th>
-                                        {% expr questions.filter(category=category).first().get_clean_choices() as choices %}
+                                        {% expr category.questions.first().get_clean_choices() as choices %}
                                         {% if choices %}
                                             {% for choice in choices %}
-                                                <th>{{choice}}</th>
+                                                <th class="uk-table-shrink">{{choice}}</th>
                                             {% endfor %}
-                                            <th>Total</th>
+                                            <th class="uk-table-shrink">Total</th>
                                         {% else %}
                                             <th>Responses</th>
                                         {% endif %}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for question in questions %}
-                                        {% if question.category == category %}
-                                            <tr>
-                                                <td>{{question.text}}</td>
-                                                {% expr questions.filter(category=category).first().get_choices() as choices %}
-                                                {% if choices %}
-                                                    {% for choice in choices %}
-                                                        {% expr answers.filter(question=question, body=choice[0]).count as resp %}
-                                                        <td>{{resp}}</td>
+                                    {% for question in category.questions.all %}
+                                        <tr>
+                                            <td>{{ question.text }}</td>
+                                            {% if question.get_choices %}
+                                                {% for choice in question.get_choices %}
+                                                    {% expr question.answers.filter(body=choice[0]).count as resp %}
+                                                    <td>{{ resp }}</td>
+                                                {% endfor %}
+                                                <td>{{ question.answers.all.count }}</td>
+                                            {% else %}
+                                                <td>
+                                                    {% for answer in question.answers.all %}
+                                                        {{ answer.body }}<br>
                                                     {% endfor %}
-                                                    {% expr answers.filter(question=question).count as resp %}
-                                                    <td>{{resp}}</td>
-                                                {% else %}
-                                                    <td>
-                                                        {% for answer in answers %}
-                                                            {% if answer.question == question %}
-                                                                {{answer.body}}<br>
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    </td>
-                                                {% endif %}
-                                            </tr>
-                                        {% endif %}
+                                                </td>
+                                            {% endif %}
+                                        </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>

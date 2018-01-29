@@ -1,0 +1,36 @@
+{% extends 'survey/main.html' %}
+{% load i18n %}
+{% load survey_extras %}
+
+{% block title %} {{survey.name}} {% endblock title %}
+
+{% block body %}
+    <div class="uk-container uk-container-center">
+        <div class="uk-width-1-1 uk-margin-top">
+            <div class="uk-width-1-1 uk-margin-large-bottom">
+                <h2> {{survey.name}} </h2>
+                <div class="survey-description"> {{survey.description|safe}} </div>
+                <div><form action="{% url 'survey-detail' id=survey.id %}" method="post" class="uk-form-stacked">
+                    {% csrf_token %}
+                    {% for category in categories %}
+                        <div class="uk-margin-medium-top">
+                            <fieldset class="uk-fieldset">
+                                <legend class="uk-legend">{{category}}</legend>
+                                <p> {{category.description|default_if_none:''}} </p>
+                                {% include "survey/format_question.html" %}
+                            </fieldset>
+                            <hr>
+                        </div>
+                    {% empty %}
+                        <h3> {% trans "Questions" %} </h3>
+                        {% include "survey/question.html" %}
+                    {% endfor %}
+
+                    <br>
+
+                    <input class="uk-button uk-button-primary uk-button-large" type="submit" value="{% trans "I'm done!" %}">
+                </form></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

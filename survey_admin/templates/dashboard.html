@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load survey_extras %}
 
 {% block body %}
 <div class="uk-offcanvas-content">
@@ -13,33 +14,44 @@
                     <li><span href="#">Surveys</span></li>
                 </ul>
             </div>
-            <div class="uk-card uk-card-default uk-card-body">
+            <div>
                 {% if surveys %}
-                    <table class="uk-table uk-table-responsive uk-table-divider">
+                    <table class="uk-table uk-table-responsive uk-table-divider uk-table-middle">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Published</th>
+                                <th class="uk-table-shrink">Published</th>
+                                <th class="uk-table-expand">Details</th>
+                                <th class="uk-table-shrink">Responses</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for survey in surveys %}
                                 <tr>
-                                    <td class="uk-table-link">
-                                        <a href="/admin/combined-responses/{{survey.id}}/" class="uk-link-muted">{{survey.name}}</a>
-                                    </td>
-                                    <td class="uk-text-truncate">{{survey.description}}</td>
-                                    <td class="uk-table-middle">
+                                    <td>
                                         {% if survey.is_published %}
                                             <svg height="14" width="14">
-                                              <circle cx="7" cy="7" r="6" fill="green" />
+                                                <circle cx="7" cy="7" r="6" fill="green" />
                                             </svg>
                                         {% else %}
                                             <svg height="14" width="14">
-                                              <circle cx="7" cy="7" r="6" fill="red" />
+                                                <circle cx="7" cy="7" r="6" fill="red" />
                                             </svg>
                                         {% endif %}
+                                    </td>
+                                    <td class="uk-table-link uk-text-truncate">
+                                        <a href="/admin/combined-responses/{{survey.id}}/" class="uk-link-reset">
+                                            <dl class="uk-description-list">
+                                                <dt class="uk-text-success">
+                                                    {{ survey.name }}
+                                                </dt>
+                                                <dd>
+                                                    {{ survey.description|default_if_none:'' }}
+                                                </dd>
+                                            </dl>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {{ survey.responses.all.count }}
                                     </td>
                                 </tr>
                             {% endfor %}

@@ -1,0 +1,15 @@
+{% load widget_tweaks %}
+{% for form in response_form %}
+    {% if form.field.widget.attrs.category == category.name or not form.field.widget.attrs.category %}
+        <div class="uk-margin">
+            {% if form.label %}
+                <label class="uk-form-label" for="{{ form.id_for_label }}">{{ form.label }}</label>
+            {% endif %}
+            <div class="uk-form-controls">
+                {% for field in form %}
+                    {{ field }}&nbsp;&nbsp;
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}

@@ -29,12 +29,8 @@ class CombinedResponses(TemplateView):
     def get(self, request, pk):
         survey = get_object_or_404(Survey, pk=pk)
         categories = Category.objects.filter(survey=survey).order_by('order')
-        questions = Question.objects.filter(survey=survey).order_by('order')
-        answers = Answer.objects.all()
         context = {
             'survey': survey,
-            'categories': categories,
-            'questions': questions,
-            'answers': answers
+            'categories': categories
         }
         return render(request, 'combined_responses.html', context)
