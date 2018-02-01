@@ -7,6 +7,7 @@ from __future__ import (
 from builtins import object
 
 from django.db import models
+from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from future import standard_library
 
@@ -42,3 +43,9 @@ class Survey(models.Model):
     @models.permalink
     def get_absolute_url(self):
         return ('survey-detail', [self.pk])
+
+    def combined_results_url(self):
+        return format_html(
+            '<a href="/survey/view-responses/{}/" target="_blank">Combined Results</a>',
+            self.id
+        )
