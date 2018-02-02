@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # pylint: disable=invalid-name
+import os
 
 from django.conf.urls import include, url
 from django.contrib import admin
@@ -15,8 +16,9 @@ def home(request):
 
 urlpatterns = [
     url(r"^$", home, name="home"),
-    url(r'^admin/', include('survey_admin.urls')),
-    url(r'^rosetta/', include('rosetta.urls')),
     url(r'^survey/', include('survey.urls')),
-    url(r'^django-admin/', include(admin.site.urls)),
+    url(r'^admin/', include(admin.site.urls)),
 ]
+
+if os.getenv("ENVIRONMENT_SETTINGS") != "PRODUCTION":
+    urlpatterns.append(url(r'^rosetta/', include('rosetta.urls')))

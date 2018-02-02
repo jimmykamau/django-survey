@@ -3,32 +3,61 @@
 import logging
 import os
 
-print("\033[33m"
+
+INSTALLED_APPS = (
+    'django.contrib.admin',
+    'django.contrib.admindocs',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'survey',
+    'bootstrapform',
+    'widget_tweaks',
+)
+
+if os.getenv("ENVIRONMENT_SETTINGS") != "PRODUCTION":
+    print("\033[33m"
       "You're using a dev settings file. It includes django rosetta (in order "
       " for dev to update translations) that is only useful for dev. "
       "If you're a developper you need to 'pip install requirement_dev.txt', "
       "If you want to use the app without doing your own settings you should"
       " remove django-rosetta from the installed apps in the settings."
       "\033[39m")
+    logging.basicConfig(
+        level=logging.DEBUG, format='%(name)s.%(funcName)s() l.%(lineno)s -\\033[32m %(message)s \033[39m')
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'filters': {
+            'require_debug_false': {
+                '()': 'django.utils.log.RequireDebugFalse'
+            }
+        },
+        'handlers': {
+            'mail_admins': {
+                'level': 'ERROR',
+                'filters': ['require_debug_false'],
+                'class': 'django.utils.log.AdminEmailHandler'
+            }
+        },
+        'loggers': {
+            'django.request': {
+                'handlers': ['mail_admins'],
+                'level': 'ERROR',
+                'propagate': True,
+            },
+        }
+    }
+    INSTALLED_APPS += ('rosetta',)
+    DEBUG=True
+else:
+    DEBUG = False
 
-DEBUG = True
 ROOT = os.path.dirname(os.path.abspath(__file__))
 CSV_DIR = os.path.join(ROOT, "csv")
-
-logging.basicConfig(level=logging.DEBUG, format='%(name)s.%(funcName)s() l.%(lineno)s -\
-\033[32m %(message)s \033[39m')
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2',
-        # 'mysql', 'sqlite3' or 'oracle'
-        'NAME': 'survey.db',  # Or path to database file if using sqlite3
-        'USER': '',  # Not used with sqlite3
-        'PASSWORD': '',  # Not used with sqlite3.
-        'HOST': '',  # Set to empty string for localhost. Not used with sqlite3
-        'PORT': '',  # Set to empty string for default. Not used with sqlite3
-    }
-}
 
 USER_DID_NOT_ANSWER = "Left blank"
 
@@ -61,7 +90,7 @@ STATICFILES_DIRS = [
 ]
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'js*79rk(+s+x9)8co+10$zghe2f)+33jd1l2m#f)vl+pvtj24e'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 TEMPLATES = [
     {
@@ -100,22 +129,6 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'urls'
 WSGI_APPLICATION = 'wsgi.application'
 
-INSTALLED_APPS = (
-    'django.contrib.admin',
-    'django.contrib.admindocs',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django.contrib.sites',
-    'survey',
-    'survey_admin',
-    'bootstrapform',
-    'rosetta',
-    'widget_tweaks',
-)
-
 LOCALE_PATHS = (
     os.path.join(ROOT, 'survey', "locale"),
 )
@@ -125,28 +138,4 @@ LANGUAGES = (
     ('fr', 'french'),
 )
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    }
-}
-
-ALLOWED_HOSTS = ["localhost"]
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(",")
